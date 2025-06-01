@@ -1,0 +1,102 @@
+.app-download {
+    margin: var(--space-20) auto;
+    padding: var(--space-16) var(--space-6);
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    border-radius: var(--radius-2xl);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+}
+
+.app-download::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: float 15s ease-in-out infinite;
+}
+
+.app-download h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.app-download p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    margin-bottom: var(--space-8);
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.app-download-platforms {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+}
+
+.app-download-platforms a {
+    display: block;
+    transition: var(--transition-normal);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.app-download-platforms img {
+    width: clamp(140px, 25vw, 180px);
+    height: auto;
+    transition: var(--transition-normal);
+    cursor: pointer;
+    border-radius: var(--radius-xl);
+}
+
+.app-download-platforms a:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: var(--shadow-2xl);
+}
+
+.app-download-platforms a:hover img {
+    filter: brightness(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-download {
+        margin: var(--space-16) auto;
+        padding: var(--space-12) var(--space-4);
+    }
+
+    .app-download-platforms {
+        gap: var(--space-4);
+    }
+
+    .app-download-platforms img {
+        width: clamp(120px, 35vw, 160px);
+    }
+}
+
+@media (max-width: 480px) {
+    .app-download {
+        padding: var(--space-10) var(--space-3);
+    }
+
+    .app-download-platforms {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-4);
+    }
+
+    .app-download-platforms img {
+        width: 160px;
+    }
+}

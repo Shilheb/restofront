@@ -1,0 +1,102 @@
+.search-bar {
+  width: 100%;
+  max-width: 600px;
+  margin: var(--space-10) auto;
+  padding: 0 var(--space-4);
+}
+
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border: 3px solid var(--gray-200);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-4) var(--space-6);
+  transition: var(--transition-normal);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.search-bar.active .search-input-container {
+  border-color: var(--primary-orange);
+  box-shadow: 0 0 0 6px rgba(255, 107, 53, 0.15), 0 12px 35px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.search-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: var(--space-4);
+  opacity: 0.7;
+  transition: var(--transition-fast);
+}
+
+.search-bar.active .search-icon {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(45%) sepia(84%) saturate(2482%) hue-rotate(346deg) brightness(100%) contrast(94%);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: var(--text-lg);
+  font-family: var(--font-primary);
+  color: var(--gray-800);
+  background: transparent;
+  padding: var(--space-2) 0;
+  font-weight: 500;
+}
+
+.search-input::placeholder {
+  color: var(--gray-400);
+  font-weight: 400;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  font-size: var(--text-xl);
+  color: var(--gray-400);
+  cursor: pointer;
+  padding: var(--space-1);
+  margin-left: var(--space-2);
+  border-radius: var(--radius-full);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.clear-button:hover {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .search-bar {
+    margin: var(--space-6) auto;
+    padding: 0 var(--space-2);
+  }
+  
+  .search-input-container {
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .search-input {
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .search-bar {
+    margin: var(--space-4) auto;
+  }
+  
+  .search-input {
+    font-size: var(--text-sm);
+  }
+}
