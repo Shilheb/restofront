@@ -8,28 +8,21 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if admin is already logged in
-    const adminToken = localStorage.getItem('adminToken');
-    if (adminToken) {
-      // Verify token validity (in a real app, you'd validate with backend)
+    // Check if user is logged in using the regular user token
+    const token = localStorage.getItem('token');
+    if (token) {
       setIsAuthenticated(true);
     }
     setIsLoading(false);
   }, []);
 
-  const handleLogin = (credentials) => {
-    // Simple authentication (in production, this would be handled by backend)
-    if (credentials.username === 'admin' && credentials.password === 'admin123') {
-      const token = 'admin_' + Date.now();
-      localStorage.setItem('adminToken', token);
-      setIsAuthenticated(true);
-      return true;
-    }
-    return false;
-  };
-
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
+    // Clear all user data from localStorage
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setIsAuthenticated(false);
   };
 
@@ -45,7 +38,7 @@ const Admin = () => {
   return (
     <div className="admin-page">
       {!isAuthenticated ? (
-        <AdminLogin onLogin={handleLogin} />
+        <AdminLogin onLogin={setIsAuthenticated} />
       ) : (
         <AdminDashboard onLogout={handleLogout} />
       )}

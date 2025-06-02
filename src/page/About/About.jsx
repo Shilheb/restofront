@@ -1,30 +1,31 @@
 import React from 'react';
 import './About.css';
+import { assets } from '../../assets/assets';
 
 const About = () => {
   const teamMembers = [
     {
       name: "Marco Rodriguez",
       role: "Head Chef",
-      image: "/api/placeholder/300/300",
+      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=684&q=80",
       description: "With 15 years of culinary experience, Marco brings authentic flavors and innovative techniques to every dish."
     },
     {
       name: "Sarah Johnson",
       role: "Pastry Chef",
-      image: "/api/placeholder/300/300",
+      image: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
       description: "Sarah's creative desserts and artisanal breads have earned recognition from food critics nationwide."
     },
     {
       name: "David Chen",
       role: "Restaurant Manager",
-      image: "/api/placeholder/300/300",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
       description: "David ensures every guest receives exceptional service and an unforgettable dining experience."
     },
     {
       name: "Elena Rossi",
       role: "Sous Chef",
-      image: "/api/placeholder/300/300",
+      image: "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
       description: "Elena specializes in Mediterranean cuisine and brings fresh, seasonal ingredients to our menu."
     }
   ];
@@ -61,7 +62,7 @@ const About = () => {
           <p>Crafting exceptional dining experiences since 2010</p>
         </div>
         <div className="hero-image">
-          <img src="/api/placeholder/800/600" alt="Restaurant Interior" />
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Restaurant Interior" />
         </div>
       </section>
 
@@ -98,7 +99,7 @@ const About = () => {
               </div>
             </div>
             <div className="story-image">
-              <img src="/api/placeholder/600/500" alt="Chef in Kitchen" />
+              <img src="https://images.unsplash.com/photo-1581349485608-9469926a8e5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80" alt="Chef in Kitchen" />
             </div>
           </div>
         </div>

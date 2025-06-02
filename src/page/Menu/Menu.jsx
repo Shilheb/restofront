@@ -239,90 +239,34 @@ const Menu = () => {
       {/* Menu Items Grid */}
       <section className="menu-items">
         <div className="container">
-          {filteredItems.length === 0 ? (
-            <div className="no-results">
-              <div className="no-results-icon">
-                {searchTerm ? '🔍' : '🍽️'}
-              </div>
-              <h3>{searchTerm ? 'No dishes found' : 'No items in this category'}</h3>
-              <p>
-                {searchTerm
-                  ? `No dishes match "${searchTerm}". Try a different search term.`
-                  : 'Try selecting a different category or check back later.'
-                }
-              </p>
-              {(searchTerm || selectedCategory !== 'all') && (
-                <button
-                  className="clear-filters-btn"
-                  onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('all');
-                  }}
-                >
-                  Clear Filters
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="items-grid">
-              {filteredItems.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="menu-item-card"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="item-image">
-                    <img
-                      src={item.image ? `data:image/png;base64,${item.image}` : '/api/placeholder/300/200'}
-                      alt={item.name}
-                      loading="lazy"
-                    />
-                    <div className="item-overlay">
-                      <button
-                        className={`quick-add-btn ${cartItems[item.id] ? 'added' : ''}`}
-                        onClick={() => addToCart(item.id)}
-                      >
-                        {cartItems[item.id] ? '✓ Added' : '+ Add to Cart'}
-                      </button>
-                    </div>
+          <div className="items-grid">
+            {filteredItems.map((item) => (
+              <div key={item.id} className="menu-item">
+                <div className="item-image">
+                  <img src={`data:image/jpeg;base64,${item.image}`} alt={item.name} />
+                </div>
+                <div className="item-content">
+                  <div className="item-header">
+                    <h3 className="item-title">{item.name}</h3>
+                    <span className="item-price">${item.price}</span>
                   </div>
-                  <div className="item-content">
-                    <div className="item-header">
-                      <h3 className="item-name">{item.name}</h3>
-                      <span className="item-price">${item.price}</span>
+                  <p className="item-description">{item.description}</p>
+                  <div className="item-footer">
+                    <div className="item-rating">
+                      <span className="rating-stars">★★★★★</span>
+                      <span>(4.8)</span>
                     </div>
-                    <p className="item-description">{item.description}</p>
-                    <div className="item-actions">
-                      {!cartItems[item.id] ? (
-                        <button
-                          className="add-to-cart-btn primary"
-                          onClick={() => addToCart(item.id)}
-                        >
-                          Add to Cart
-                        </button>
-                      ) : (
-                        <div className="quantity-controls">
-                          <button
-                            className="quantity-btn minus"
-                            onClick={() => addToCart(item.id)}
-                          >
-                            -
-                          </button>
-                          <span className="quantity">{cartItems[item.id]}</span>
-                          <button
-                            className="quantity-btn plus"
-                            onClick={() => addToCart(item.id)}
-                          >
-                            +
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                    <button
+                      className="add-to-cart"
+                      onClick={() => addToCart(item)}
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

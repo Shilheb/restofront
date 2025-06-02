@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AdminLogin = ({ onLogin }) => {
-  const [credentials, setCredentials] = useState({
-    username: '',
+  const [formData, setFormData] = useState({
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -10,7 +11,7 @@ const AdminLogin = ({ onLogin }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCredentials(prev => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value
     }));
@@ -22,14 +23,34 @@ const AdminLogin = ({ onLogin }) => {
     setIsLoading(true);
     setError('');
 
-    // Simulate API call delay
-    setTimeout(() => {
-      const success = onLogin(credentials);
-      if (!success) {
-        setError('Invalid username or password');
+    try {
+      const response = await axios.post('https://restolaravel-z59t.vercel.app/api/api/login', {
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (response.data.status === 'success') {
+        // Store user data in localStorage
+        localStorage.setItem('user_id', response.data.user.id);
+        localStorage.setItem('username', JSON.stringify(response.data.user.name));
+        localStorage.setItem('email', JSON.stringify(response.data.user.email));
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        onLogin(true); // Indicate successful login to parent component
+      } else {
+        setError(response.data.message || 'Login failed. Please check your credentials.');
       }
+    } catch (err) {
+      console.error('Error during login:', err);
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('An error occurred during login. Please try again.');
+      }
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -42,16 +63,16 @@ const AdminLogin = ({ onLogin }) => {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="username"
-              name="username"
-              value={credentials.username}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
               onChange={handleInputChange}
               required
-              placeholder="Enter your username"
-              autoComplete="username"
+              placeholder="Enter your email"
+              autoComplete="email"
             />
           </div>
 
@@ -61,7 +82,7 @@ const AdminLogin = ({ onLogin }) => {
               type="password"
               id="password"
               name="password"
-              value={credentials.password}
+              value={formData.password}
               onChange={handleInputChange}
               required
               placeholder="Enter your password"
@@ -83,12 +104,6 @@ const AdminLogin = ({ onLogin }) => {
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="login-info">
-          <h3>Demo Credentials</h3>
-          <p><strong>Username:</strong> admin</p>
-          <p><strong>Password:</strong> admin123</p>
-        </div>
       </div>
     </div>
   );
