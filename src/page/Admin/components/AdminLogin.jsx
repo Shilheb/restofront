@@ -23,8 +23,15 @@ const AdminLogin = ({ onLogin }) => {
     setIsLoading(true);
     setError('');
 
+    // Frontend input validation for specific admin credentials
+    if (formData.email !== 'adminresto@admin.com' || formData.password !== 'admin123') {
+      setError('Invalid admin credentials');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post('https://restolaravel-z59t.vercel.app/api/api/login', {
+      const response = await axios.post('http://localhost:8000/api/login', {
         email: formData.email,
         password: formData.password
       });

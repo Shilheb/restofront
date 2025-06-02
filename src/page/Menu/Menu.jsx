@@ -7,21 +7,10 @@ import './Menu.css';
 const Menu = () => {
   const { addToCart, cartItems } = useContext(StoreContext);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
   const [foodList, setFoodList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const location = useLocation();
-
-  // Get search query from URL if navigated from navbar search
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const searchQuery = urlParams.get('search');
-    if (searchQuery) {
-      setSearchTerm(searchQuery);
-    }
-  }, [location]);
 
   // Fetch data from API
   useEffect(() => {
@@ -30,7 +19,7 @@ const Menu = () => {
         setLoading(true);
 
         // Fetch categories
-        const categoriesResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+        const categoriesResponse = await axios.get('http://localhost:8000/api/categories');
         const categoriesData = [
           { id: 'all', name: 'All Items', icon: '🍽️' },
           ...categoriesResponse.data.data.map(cat => ({
@@ -42,7 +31,7 @@ const Menu = () => {
         setCategories(categoriesData);
 
         // Fetch food items
-        const foodResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+        const foodResponse = await axios.get('http://localhost:8000/api/articles');
         setFoodList(foodResponse.data.data);
 
       } catch (err) {
@@ -80,17 +69,8 @@ const Menu = () => {
       filtered = filtered.filter(item => item.categorie_id.toString() === selectedCategory);
     }
 
-    // Filter by search term
-    if (searchTerm.trim()) {
-      const searchLower = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(searchLower) ||
-        item.description.toLowerCase().includes(searchLower)
-      );
-    }
-
     return filtered;
-  }, [foodList, selectedCategory, searchTerm]);
+  }, [foodList, selectedCategory]);
 
   // Loading skeleton component
   const LoadingSkeleton = () => (
@@ -117,9 +97,6 @@ const Menu = () => {
 
         <section className="menu-controls">
           <div className="container">
-            <div className="search-bar">
-              <div className="skeleton-search"></div>
-            </div>
             <div className="category-filters">
               {Array(6).fill(0).map((_, index) => (
                 <div key={index} className="skeleton-category"></div>
@@ -199,18 +176,7 @@ const Menu = () => {
         <div className="container">
           <div className="controls-header">
             <h2>Find Your Perfect Dish</h2>
-            <p>Use the search and filters below to discover your next favorite meal</p>
-          </div>
-
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search for dishes, ingredients, or flavors..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-            <span className="search-icon">🔍</span>
+            <p>Use the filters below to discover your next favorite meal</p>
           </div>
 
           <div className="category-filters">
@@ -229,8 +195,7 @@ const Menu = () => {
           <div className="results-info">
             <span className="results-count">
               {filteredItems.length} {filteredItems.length === 1 ? 'dish' : 'dishes'} found
-              {searchTerm && ` for "${searchTerm}"`}
-              {selectedCategory !== 'all' && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
+              {selectedCategory !== 'all' && ` in ${categories.find(c => c.id === selectedCategory)?.name || 'Unknown Category'}`}
             </span>
           </div>
         </div>

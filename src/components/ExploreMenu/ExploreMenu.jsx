@@ -15,7 +15,7 @@ const ExploreMenu = ({ category, setCategory }) => {
 
     const fetchMenu = async () => {
       try {
-        const response = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+        const response = await axios.get('http://localhost:8000/api/categories');
         setMenuList(response.data.data);
         setLoading(false);
       } catch (err) {

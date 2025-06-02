@@ -7,7 +7,7 @@ const About = () => {
     {
       name: "Marco Rodriguez",
       role: "Head Chef",
-      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=684&q=80",
+      image: "https://images.unsplash.com/photo-1694821144277-7d9d5e0b0522?q=80&w=1334&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       description: "With 15 years of culinary experience, Marco brings authentic flavors and innovative techniques to every dish."
     },
     {

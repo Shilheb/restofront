@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import './LoginPopup.css'
 import { assets } from '../../assets/assets'
+import { StoreContext } from '../../Context/StoreContext.jsx'
 import axios from 'axios'
 
 const LoginPopup = ({setShowLogin}) => {
-    const [currState, setCurrState] = useState("Sign Up");
+    const { url, setToken } = useContext(StoreContext);
+    const [currState, setCurrState] = useState("Login");
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -26,11 +28,11 @@ const LoginPopup = ({setShowLogin}) => {
         e.preventDefault();
         
         try {
-            const endpoint = currState === "Login" 
-                ? 'https://restolaravel-z59t.vercel.app/api/api/login' 
-                : 'https://restolaravel-z59t.vercel.app/api/api/register';
+            const apiUrl = currState === "Login" 
+                ? 'http://localhost:8000/api/login' 
+                : 'http://localhost:8000/api/register';
             
-            const response = await axios.post(endpoint, formData);
+            const response = await axios.post(apiUrl, formData);
 
             if (response.data.status === 'success') {
                 localStorage.setItem('user_id', response.data.user.id);
@@ -39,6 +41,7 @@ const LoginPopup = ({setShowLogin}) => {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify(response.data.user));
                 setShowLogin(false);
+                setToken(response.data.token);
             }
         } catch (error) {
             if (error.response?.data?.errors) {

@@ -64,7 +64,7 @@ const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn }) => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://restolaravel-z59t.vercel.app/api/api/logout', {
+      const response = await fetch('http://localhost:8000/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

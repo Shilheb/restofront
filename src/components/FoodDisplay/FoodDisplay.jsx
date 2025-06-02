@@ -12,7 +12,7 @@ const FoodDisplay = ({ category = "All", categories = [], searchTerm = "" }) => 
     const fetchFoodItems = async () => {
       try {
         const response = await axios.get(
-          'https://restolaravel-z59t.vercel.app/api/api/articles'
+          'http://localhost:8000/api/articles'
         );
         //console.log(response.data.data); // Debug: Log API response
         setFoodList(response.data.data);

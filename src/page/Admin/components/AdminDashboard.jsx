@@ -41,7 +41,7 @@ const AdminDashboard = ({ onLogout }) => {
       setError(null);
       try {
         if (activeTab === 'products') {
-          const response = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+          const response = await axios.get('http://localhost:8000/api/articles');
           setProducts(response.data.data || []);
         } else if (activeTab === 'categories') {
           // Categories are now fetched on mount, so no need to fetch here
@@ -69,11 +69,11 @@ const AdminDashboard = ({ onLogout }) => {
       setStatsError(null);
       try {
         // Fetch categories
-        const categoriesResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+        const categoriesResponse = await axios.get('http://localhost:8000/api/categories');
         setCategories(categoriesResponse.data.data || []);
 
         // Fetch products count for stats
-        const productsResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+        const productsResponse = await axios.get('http://localhost:8000/api/articles');
         
         setStats({
           totalProducts: productsResponse.data.data?.length || 0,
@@ -102,8 +102,8 @@ const AdminDashboard = ({ onLogout }) => {
     try {
       const token = localStorage.getItem('token');
       const apiUrl = editingProduct 
-        ? `https://restolaravel-z59t.vercel.app/api/articles/${editingProduct.id}` 
-        : 'https://restolaravel-z59t.vercel.app/api/articles';
+        ? `http://localhost:8000/api/articles/${editingProduct.id}` 
+        : 'http://localhost:8000/api/articles';
       
       const method = editingProduct ? 'put' : 'post';
 
@@ -128,11 +128,11 @@ const AdminDashboard = ({ onLogout }) => {
       });
 
       // Refresh products list after save
-      const response = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+      const response = await axios.get('http://localhost:8000/api/articles');
       setProducts(response.data.data || []);
 
       // Update stats
-      const productsResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+      const productsResponse = await axios.get('http://localhost:8000/api/articles');
       setStats(prevStats => ({
         ...prevStats,
         totalProducts: productsResponse.data.data?.length || 0,
@@ -155,15 +155,15 @@ const AdminDashboard = ({ onLogout }) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://restolaravel-z59t.vercel.app/api/articles/${id}`, {
+        await axios.delete(`http://localhost:8000/articles/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         // Refresh products list
-        const response = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+        const response = await axios.get('http://localhost:8000/api/articles');
         setProducts(response.data.data || []);
 
         // Update stats
-        const productsResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/articles');
+        const productsResponse = await axios.get('http://localhost:8000/api/articles');
         setStats(prevStats => ({
           ...prevStats,
           totalProducts: productsResponse.data.data?.length || 0,
@@ -186,8 +186,8 @@ const AdminDashboard = ({ onLogout }) => {
     try {
       const token = localStorage.getItem('token');
       const apiUrl = editingCategory
-        ? `https://restolaravel-z59t.vercel.app/api/categories/${editingCategory.id}`
-        : 'https://restolaravel-z59t.vercel.app/api/categories';
+        ? `http://localhost:8000/categories/${editingCategory.id}`
+        : 'http://localhost:8000/categories';
       
       const method = editingCategory ? 'put' : 'post';
 
@@ -199,11 +199,11 @@ const AdminDashboard = ({ onLogout }) => {
       });
 
       // Refresh categories list
-      const response = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+      const response = await axios.get('http://localhost:8000/api/categories');
       setCategories(response.data.data || []);
 
       // Update stats
-      const categoriesResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+      const categoriesResponse = await axios.get('http://localhost:8000/api/categories');
       setStats(prevStats => ({
         ...prevStats,
         activeCategories: categoriesResponse.data.data?.length || 0,
@@ -226,15 +226,15 @@ const AdminDashboard = ({ onLogout }) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://restolaravel-z59t.vercel.app/api/categories/${id}`, {
+        await axios.delete(`http://localhost:8000/categories/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         // Refresh categories list
-        const response = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+        const response = await axios.get('http://localhost:8000/api/categories');
         setCategories(response.data.data || []);
 
         // Update stats
-        const categoriesResponse = await axios.get('https://restolaravel-z59t.vercel.app/api/api/categories');
+        const categoriesResponse = await axios.get('http://localhost:8000/api/categories');
         setStats(prevStats => ({
           ...prevStats,
           activeCategories: categoriesResponse.data.data?.length || 0,
@@ -384,7 +384,7 @@ const AdminDashboard = ({ onLogout }) => {
                             name: product.name,
                             description: product.description,
                             price: product.price,
-                            category: product.category,
+                            category: product.category_id,
                             image: null
                           });
                           setShowProductForm(true);
