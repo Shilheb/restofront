@@ -56,11 +56,13 @@ const orderData = {
            const response = await axios.post('http://127.0.0.1:8000/api/confirm-payment', orderData);
    
            if (response.data.status === 'success') {
-            
-               navigate('/order-confirmation', { 
-                   state: { 
-                       orderDetails: response.data.data 
-                   } 
+               // Clear the cart after successful order
+               clearCart();
+
+               navigate('/order-confirmation', {
+                   state: {
+                       orderDetails: response.data.data
+                   }
                });
            }
        } catch (error) {

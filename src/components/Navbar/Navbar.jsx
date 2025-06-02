@@ -3,6 +3,7 @@ import './Navbar.css';
 import { assets } from '../../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../Context/StoreContext.jsx';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn }) => {
   const [menu, setMenu] = useState("home");
@@ -64,7 +65,7 @@ const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn }) => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/logout', {
+      const response = await fetch(API_ENDPOINTS.LOGOUT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

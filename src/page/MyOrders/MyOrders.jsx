@@ -1,44 +1,68 @@
 import React, { useState, useEffect } from 'react'
 import './MyOrders.css'
+import { API_ENDPOINTS } from '../../config/api'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Mock data for demonstration
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setOrders([
-        {
-          id: 1,
-          date: '2024-01-15',
-          status: 'Delivered',
-          total: 45.50,
-          items: [
-            { name: 'Margherita Pizza', quantity: 1, price: 25.00 },
-            { name: 'Caesar Salad', quantity: 1, price: 15.50 },
-            { name: 'Coca Cola', quantity: 1, price: 5.00 }
-          ]
-        },
-        {
-          id: 2,
-          date: '2024-01-12',
-          status: 'In Progress',
-          total: 32.00,
-          items: [
-            { name: 'Chicken Burger', quantity: 2, price: 16.00 }
-          ]
-        }
-      ]);
-      setLoading(false);
-    }, 1000);
+    fetchUserOrders();
   }, []);
+
+  const fetchUserOrders = async () => {
+    try {
+      const userId = localStorage.getItem('user_id');
+      if (!userId) {
+        navigate('/');
+        return;
+      }
+
+      setLoading(true);
+      const response = await axios.get(API_ENDPOINTS.USER_ORDERS(userId));
+
+      if (response.data.status === 'success') {
+        // Transform the data to match the expected format
+        const transformedOrders = response.data.data.map(order => ({
+          id: order.id,
+          date: order.created_at,
+          status: getStatusDisplay(order.status),
+          total: order.total_amount,
+          items: order.items || []
+        }));
+        setOrders(transformedOrders);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      // Keep orders empty if there's an error
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusDisplay = (status) => {
+    const statusMap = {
+      'pending': 'Pending',
+      'confirmed': 'Confirmed',
+      'preparing': 'Preparing',
+      'on_the_way': 'On the way',
+      'delivered': 'Delivered',
+      'cancelled': 'Cancelled'
+    };
+    return statusMap[status] || status;
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'Delivered': return 'var(--success)';
-      case 'In Progress': return 'var(--warning)';
+      case 'On the way': return 'var(--info)';
+      case 'Preparing': return 'var(--warning)';
+      case 'Confirmed': return 'var(--primary)';
+      case 'Pending': return 'var(--secondary)';
       case 'Cancelled': return 'var(--error)';
       default: return 'var(--gray-500)';
     }
@@ -47,7 +71,10 @@ const MyOrders = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'Delivered': return '✅';
-      case 'In Progress': return '🚚';
+      case 'On the way': return '🚚';
+      case 'Preparing': return '👨‍🍳';
+      case 'Confirmed': return '✔️';
+      case 'Pending': return '⏳';
       case 'Cancelled': return '❌';
       default: return '📦';
     }

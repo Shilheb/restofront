@@ -11,6 +11,8 @@ import Cart from './page/Cart/Cart'
 import LoginPopup from './components/LoginPopup/LoginPopup'
 import PlaceOrder from './page/PlaceOrder/PlaceOrder'
 import MyOrders from './page/MyOrders/MyOrders'
+import OrderConfirmation from './page/OrderConfirmation/OrderConfirmation'
+import Profile from './page/Profile/Profile'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 const App = () => {
@@ -40,7 +42,9 @@ const App = () => {
                 <Route path='/contact' element={<Contact/>}/>
                 <Route path='/cart' element={<Cart/>}/>
                 <Route path='/order' element={<PlaceOrder/>}/>
+                <Route path='/order-confirmation' element={<OrderConfirmation/>}/>
                 <Route path='/myorder' element={<MyOrders/>}/>
+                <Route path='/profile' element={<Profile/>}/>
               </Routes>
             </div>
             <Footer />

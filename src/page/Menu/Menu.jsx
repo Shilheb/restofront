@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { StoreContext } from '../../Context/StoreContext';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 import './Menu.css';
 
 const Menu = () => {
@@ -19,7 +20,7 @@ const Menu = () => {
         setLoading(true);
 
         // Fetch categories
-        const categoriesResponse = await axios.get('http://localhost:8000/api/categories');
+        const categoriesResponse = await axios.get(API_ENDPOINTS.CATEGORIES);
         const categoriesData = [
           { id: 'all', name: 'All Items', icon: '🍽️' },
           ...categoriesResponse.data.data.map(cat => ({
@@ -31,7 +32,7 @@ const Menu = () => {
         setCategories(categoriesData);
 
         // Fetch food items
-        const foodResponse = await axios.get('http://localhost:8000/api/articles');
+        const foodResponse = await axios.get(API_ENDPOINTS.ARTICLES);
         setFoodList(foodResponse.data.data);
 
       } catch (err) {
@@ -223,7 +224,7 @@ const Menu = () => {
                     </div>
                     <button
                       className="add-to-cart"
-                      onClick={() => addToCart(item)}
+                      onClick={() => addToCart(item.id)}
                     >
                       Add to Cart
                     </button>

@@ -3,6 +3,7 @@ import './LoginPopup.css'
 import { assets } from '../../assets/assets'
 import { StoreContext } from '../../Context/StoreContext.jsx'
 import axios from 'axios'
+import { API_ENDPOINTS } from '../../config/api'
 
 const LoginPopup = ({setShowLogin}) => {
     const { url, setToken } = useContext(StoreContext);
@@ -28,9 +29,9 @@ const LoginPopup = ({setShowLogin}) => {
         e.preventDefault();
         
         try {
-            const apiUrl = currState === "Login" 
-                ? 'http://localhost:8000/api/login' 
-                : 'http://localhost:8000/api/register';
+            const apiUrl = currState === "Login"
+                ? API_ENDPOINTS.LOGIN
+                : API_ENDPOINTS.REGISTER;
             
             const response = await axios.post(apiUrl, formData);
 

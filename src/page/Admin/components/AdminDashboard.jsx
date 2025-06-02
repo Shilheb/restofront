@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Import axios
+import { API_ENDPOINTS } from '../../../config/api';
 
 const AdminDashboard = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('products');
   const [products, setProducts] = useState([]); // State for products
   const [categories, setCategories] = useState([]); // State for categories
+  const [orders, setOrders] = useState([]); // State for orders
   const [stats, setStats] = useState({ // State for dynamic stats
     totalProducts: '...',
     activeCategories: '...',
@@ -46,6 +48,9 @@ const AdminDashboard = ({ onLogout }) => {
         } else if (activeTab === 'categories') {
           // Categories are now fetched on mount, so no need to fetch here
           // setCategories(response.data.data || []);
+        } else if (activeTab === 'orders') {
+          const response = await axios.get(API_ENDPOINTS.ORDERS);
+          setOrders(response.data.data || []);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -74,12 +79,16 @@ const AdminDashboard = ({ onLogout }) => {
 
         // Fetch products count for stats
         const productsResponse = await axios.get('http://localhost:8000/api/articles');
-        
+
+        // Fetch order stats
+        const statsResponse = await axios.get(API_ENDPOINTS.ORDER_STATS);
+        const orderStats = statsResponse.data.data;
+
         setStats({
           totalProducts: productsResponse.data.data?.length || 0,
           activeCategories: categoriesResponse.data.data?.length || 0,
-          ordersToday: '0', // Placeholder until orders API is implemented
-          revenueToday: '$0' // Placeholder until revenue API is implemented
+          ordersToday: orderStats.today_orders || 0,
+          revenueToday: `${orderStats.today_revenue || 0} DT`
         });
       } catch (err) {
         console.error('Error fetching initial data:', err);
@@ -248,6 +257,28 @@ const AdminDashboard = ({ onLogout }) => {
           setError('Failed to delete category. Please try again.');
         }
       }
+    }
+  };
+
+  // Update order status
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const response = await axios.put(API_ENDPOINTS.ORDER_STATUS(orderId), {
+        status: newStatus
+      });
+
+      if (response.data.status === 'success') {
+        // Update the order in the local state
+        setOrders(prevOrders =>
+          prevOrders.map(order =>
+            order.id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+        alert('Order status updated successfully!');
+      }
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      alert('Failed to update order status');
     }
   };
 
@@ -514,9 +545,43 @@ const AdminDashboard = ({ onLogout }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td colSpan="6" className="no-data">No orders available</td>
-                  </tr>
+                  {loading ? (
+                    <tr>
+                      <td colSpan="6" className="loading">Loading orders...</td>
+                    </tr>
+                  ) : orders.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="no-data">No orders available</td>
+                    </tr>
+                  ) : (
+                    orders.map((order) => (
+                      <tr key={order.id}>
+                        <td>#{order.id}</td>
+                        <td>{order.customer_name}</td>
+                        <td>{new Date(order.created_at).toLocaleDateString()}</td>
+                        <td>
+                          <span className={`status-badge status-${order.status}`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td>{order.total_amount.toFixed(2)} DT</td>
+                        <td>
+                          <select
+                            value={order.status}
+                            onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                            className="status-select"
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="preparing">Preparing</option>
+                            <option value="on_the_way">On the way</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

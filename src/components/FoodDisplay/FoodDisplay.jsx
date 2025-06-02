@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import './FoodDisplay.css';
 import FoodItem from '../FoodItem/FoodItem';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const FoodDisplay = ({ category = "All", categories = [], searchTerm = "" }) => {
   const [foodList, setFoodList] = useState([]);
@@ -11,9 +12,7 @@ const FoodDisplay = ({ category = "All", categories = [], searchTerm = "" }) => 
   useEffect(() => {
     const fetchFoodItems = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/articles'
-        );
+        const response = await axios.get(API_ENDPOINTS.ARTICLES);
         //console.log(response.data.data); // Debug: Log API response
         setFoodList(response.data.data);
       } catch (err) {

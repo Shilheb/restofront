@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EwploreMenu.css';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ExploreMenu = ({ category, setCategory }) => {
   const [menuList, setMenuList] = useState([]);
@@ -15,7 +16,7 @@ const ExploreMenu = ({ category, setCategory }) => {
 
     const fetchMenu = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/categories');
+        const response = await axios.get(API_ENDPOINTS.CATEGORIES);
         setMenuList(response.data.data);
         setLoading(false);
       } catch (err) {

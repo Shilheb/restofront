@@ -6,12 +6,16 @@ import { assets } from '../../assets/assets';
 
 const Cart = () => {
 
-  const {cartItems, food_list, removeFromCart, getTotalCartAmount} = useContext(StoreContext);
+  const {cartItems, food_list, foodList, removeFromCart, getTotalCartAmount} = useContext(StoreContext);
   const navigate = useNavigate();
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
 
-  const cartItemsArray = food_list.filter(item => cartItems[item.food_id] > 0);
+  // Use dynamic foodList from API, fallback to static food_list
+  const currentFoodList = foodList.length > 0 ? foodList : food_list;
+  const cartItemsArray = currentFoodList.filter(item =>
+    cartItems[item.id] > 0 || cartItems[item.food_id] > 0
+  );
   const subtotal = getTotalCartAmount();
   const deliveryFee = subtotal === 0 ? 0 : 5;
   const discount = promoApplied ? subtotal * 0.1 : 0;
@@ -57,25 +61,33 @@ const Cart = () => {
           <p>Remove</p>
         </div>
 
-        {cartItemsArray.map((item, index) => (
-          <div key={item.food_id} className="cart-items-item">
-            <img
-              src={item.food_image || assets.fallback_image}
-              alt={item.food_name}
-            />
-            <div className="cart-item-name">{item.food_name}</div>
-            <div className="cart-item-price">{parseFloat(item.food_price).toFixed(2)} DT</div>
-            <div className="cart-item-quantity">{cartItems[item.food_id]}</div>
-            <div className="cart-item-total">{(item.food_price * cartItems[item.food_id]).toFixed(2)} DT</div>
-            <button
-              className='cart-items-remove-icon'
-              onClick={() => removeFromCart(item.food_id)}
-              aria-label={`Remove ${item.food_name} from cart`}
-            >
-              ×
-            </button>
-          </div>
-        ))}
+        {cartItemsArray.map((item, index) => {
+          const itemId = item.id || item.food_id;
+          const itemName = item.name || item.food_name;
+          const itemPrice = item.price || item.food_price;
+          const itemImage = item.image ? `data:image/jpeg;base64,${item.image}` : (item.food_image || assets.fallback_image);
+          const quantity = cartItems[itemId];
+
+          return (
+            <div key={itemId} className="cart-items-item">
+              <img
+                src={itemImage}
+                alt={itemName}
+              />
+              <div className="cart-item-name">{itemName}</div>
+              <div className="cart-item-price">{parseFloat(itemPrice).toFixed(2)} DT</div>
+              <div className="cart-item-quantity">{quantity}</div>
+              <div className="cart-item-total">{(itemPrice * quantity).toFixed(2)} DT</div>
+              <button
+                className='cart-items-remove-icon'
+                onClick={() => removeFromCart(itemId)}
+                aria-label={`Remove ${itemName} from cart`}
+              >
+                ×
+              </button>
+            </div>
+          );
+        })}
       </div>
       <div className="cart-bottom">
         <div className="cart-promocode">
